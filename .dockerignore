@@ -1,0 +1,9 @@
+# Ignore unnecessary files during Docker build
+*.md
+.git
+.gitignore
+Dockerfile*
+docker-compose*
+*.log
+.env*
+README*
