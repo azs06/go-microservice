@@ -1,11 +1,11 @@
 version: '3.8'
 
 services:
-  pdf-microservice:
+  document-microservice:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: pdf-microservice
+    container_name: document-microservice
     ports:
       - "${PORT:-8080}:${PORT:-8080}"
     environment:
@@ -48,13 +48,13 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
     environment:
-      - PDF_SERVICE_PORT=${PORT:-8080}
+      - DOCUMENT_SERVICE_PORT=${PORT:-8080}
     depends_on:
-      - pdf-microservice
+      - document-microservice
     restart: unless-stopped
     profiles:
       - with-nginx
 
 networks:
   default:
-    name: pdf-network
+    name: document-network

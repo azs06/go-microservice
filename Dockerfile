@@ -13,7 +13,7 @@ RUN go mod download
 COPY . .
 
 # Build the application
-RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o pdf-microservice .
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-s -w" -o document-microservice .
 
 # Final stage with Chrome
 FROM chromedp/headless-shell:latest
@@ -25,10 +25,10 @@ RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/
 WORKDIR /app
 
 # Copy binary from builder
-COPY --from=builder /app/pdf-microservice .
+COPY --from=builder /app/document-microservice .
 
 # Create non-root user
-RUN useradd -r -s /bin/false appuser && chown appuser:appuser /app/pdf-microservice
+RUN useradd -r -s /bin/false appuser && chown appuser:appuser /app/document-microservice
 
 # Switch to non-root user
 USER appuser
@@ -41,4 +41,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
     CMD curl -f http://localhost:8080/health || exit 1
 
 # Run the application
-CMD ["./pdf-microservice"]
+CMD ["./document-microservice"]
