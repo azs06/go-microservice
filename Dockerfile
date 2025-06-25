@@ -24,11 +24,18 @@ RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/
 # Set working directory
 WORKDIR /app
 
-# Copy binary from builder
+# Copy binary and startup script from builder
 COPY --from=builder /app/document-microservice .
+COPY docker-start.sh .
 
-# Create non-root user
-RUN useradd -r -s /bin/false appuser && chown appuser:appuser /app/document-microservice
+# Create non-root user and set permissions
+RUN useradd -r -s /bin/false appuser && \
+    chown appuser:appuser /app/document-microservice && \
+    chmod +x /app/docker-start.sh && \
+    chown appuser:appuser /app/docker-start.sh && \
+    mkdir -p /home/appuser/.cache/fontconfig && \
+    mkdir -p /home/appuser/.fontconfig && \
+    chown -R appuser:appuser /home/appuser
 
 # Switch to non-root user
 USER appuser
@@ -40,5 +47,6 @@ EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
     CMD curl -f http://localhost:8080/health || exit 1
 
-# Run the application
-CMD ["./document-microservice"]
+# Override the entrypoint and run our script
+ENTRYPOINT []
+CMD ["/bin/bash", "/app/docker-start.sh"]
