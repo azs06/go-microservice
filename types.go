@@ -1,7 +1,5 @@
 package main
 
-import "encoding/json"
-
 // Request structures
 type CSVRequest struct {
 	Data      [][]interface{} `json:"data"`
@@ -68,9 +66,3 @@ func (e *ExcelRequest) SetDefaults() {
 	}
 }
 
-func parseFormData(formValue string, target interface{}) error {
-	if formValue == "" {
-		return nil
-	}
-	return json.Unmarshal([]byte(formValue), target)
-}

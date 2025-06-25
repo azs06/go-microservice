@@ -17,3 +17,10 @@ func writeErrorResponse(w http.ResponseWriter, message string, code int, details
 	
 	json.NewEncoder(w).Encode(errorResp)
 }
+
+func parseFormData(formValue string, target interface{}) error {
+	if formValue == "" {
+		return nil
+	}
+	return json.Unmarshal([]byte(formValue), target)
+}

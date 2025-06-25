@@ -14,7 +14,7 @@ This is a comprehensive document generation microservice built in Go that suppor
 go build -o document-microservice
 
 # Run the application
-go run main.go
+go run .
 
 # Install dependencies
 go mod tidy
